@@ -1,14 +1,14 @@
 "use strict"
 
 const fs = require('fs').promises,
-      Path = require('path'),
+      Path = require('path'),   
       debug = require('debug')('vault-provision'),
       ndebug = require('debug')('net'),
       config = require('./config'),
       request = require('request-promise-native');
 
 const fsroot = Path.join(process.cwd(), config.dataPath);
-const vaultroot = Path.posix.join(config.vaultRoot, "v1");
+const vaultroot = config.vaultRoot;
 const vaulttoken = config.vaultToken;
 const priorities = config.priorities;
 
@@ -22,6 +22,11 @@ async function main() {
 
 async function provisionDir(path) {
     let paths = [];
+    if (done[Path.join(fsroot, path)]) {
+        debug(`Skipping duplicate path ${Path.join(path)}`);
+        return;        
+    }
+    done[Path.join(fsroot, path)] = 1;
     try {
         paths = await fs.readdir(Path.join(fsroot, path), {withFileTypes: true});
     } catch (e) {
@@ -29,12 +34,6 @@ async function provisionDir(path) {
     }
     for (let file of paths) {
         if (file.isDirectory()) {
-            let newpath = Path.join(fsroot, path, file.name);
-            if (done[newpath]) {
-                debug(`Skipping duplicate path ${Path.join(path, file.name)}`);
-                continue;
-            }
-            done[newpath] = 1;
             await provisionDir(Path.join(path, file.name));
         } else {
             await provisionFile(Path.join(path, file.name));
@@ -78,7 +77,7 @@ async function provisionFile(path) {
     }
     try {
         let uri = Path.posix.join(Path.dirname(path), Path.basename(path,'.json'));
-        let rv = await request(`${vaultroot}${uri}`, {
+        let rv = await request(`${vaultroot}/v1${uri}`, {
             body: data,
             json: true,
             method: 'POST',
