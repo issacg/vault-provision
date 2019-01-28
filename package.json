@@ -1,0 +1,24 @@
+{
+  "name": "vault-provision",
+  "version": "1.0.0",
+  "main": "index.js",
+  "dependencies": {
+    "debug": "^4.1.1",
+    "request": "^2.88.0",
+    "request-promise-native": "^1.0.5"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Issac Goldstand",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/issacg/vault-provision.git"
+  },
+  "bugs": {
+    "url": "https://github.com/issacg/vault-provision/issues"
+  },
+  "homepage": "https://github.com/issacg/vault-provision#readme",
+  "description": ""
+}
