@@ -4,17 +4,15 @@ const fs = require('fs').promises,
       Path = require('path'),
       debug = require('debug')('vault-provision'),
       ndebug = require('debug')('net'),
+      config = require('./config'),
       request = require('request-promise-native');
 
-const fsroot = Path.join(process.cwd() ,"../data");
-const vaultroot = "http://localhost:8200/v1";
-const vaulttoken = '1234';
+const fsroot = Path.join(process.cwd(), config.dataPath);
+const vaultroot = Path.posix.join(config.vaultRoot, "v1");
+const vaulttoken = config.vaultToken;
+const priorities = config.priorities;
 
 let done = {};
-let priorities = [
-    '/sys',
-    '/'
-];
 
 async function main() {
     for (let root of priorities) {
