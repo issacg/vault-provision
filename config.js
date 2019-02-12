@@ -7,7 +7,8 @@ const config = require('rc')('vault-provision', {
     ],
     vaultRoot: "https://127.0.0.1:8200",
     vaultToken: "",
-    dataPath: "./data"
+    dataPath: "./data",
+    template: {}
 });
 
 module.exports = config;

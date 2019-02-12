@@ -5,6 +5,7 @@ const fs = require('fs').promises,
       debug = require('debug')('vault-provision'),
       ndebug = require('debug')('net'),
       config = require('./config'),
+      Mustache = require('mustache'),
       request = require('request-promise-native');
 
 const fsroot = Path.join(process.cwd(), config.dataPath);
@@ -49,8 +50,8 @@ async function provisionFile(path) {
     }
     console.log(`Provisioning ${path}`)
     try {
-        let json = await fs.readFile(Path.join(fsroot,path));
-        data = JSON.parse(json);
+        let json = await fs.readFile(Path.join(fsroot,path), 'utf8');
+        data = JSON.parse(Mustache.render(json, config.template));
     } catch (e) {
         console.error(e.stack);
         return;
@@ -76,6 +77,7 @@ async function provisionFile(path) {
         }
     }
     try {
+        path = Mustache.render(path, config.template);
         let uri = Path.posix.join(Path.dirname(path), Path.basename(path,'.json'));
         let rv = await request(`${vaultroot}/v1${uri}`, {
             body: data,
