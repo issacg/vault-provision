@@ -5,8 +5,8 @@ const config = require('rc')('vault-provision', {
         "/sys",
         "/"
     ],
-    vaultRoot: "https://127.0.0.1:8200",
-    vaultToken: "",
+    vaultRoot: process.env.VAULT_ADDR || "https://127.0.0.1:8200",
+    vaultToken: process.env.VAULT_TOKEN || "",
     dataPath: "./data",
     template: {}
 });
