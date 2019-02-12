@@ -56,6 +56,12 @@ async function provisionFile(path) {
         console.error(e.stack);
         return;
     }
+    // Apply templating
+    path = Mustache.render(path, config.template).replace(/\\/g,'/');
+    // JSONify policy subsection
+    if (Path.dirname(path).match(/^\/sys\/policy/) && data.hasOwnProperty('policy'))
+        data.policy = JSON.stringify(data.policy);
+    // Pre-commit test
     if (data.hasOwnProperty('_unless_get')) {
         let skip = true;
         let testpath = data._unless_get;
@@ -78,8 +84,7 @@ async function provisionFile(path) {
     }
     // Provision
     try {
-        path = Mustache.render(path, config.template);
-        let uri = Path.join(Path.dirname(path), Path.basename(path,'.json')).replace(/\\/g,'/');
+        let uri = Path.join(Path.dirname(path), Path.basename(path,'.json'));
         let rv = await request(`${vaultroot}/v1${uri}`, {
             body: data,
             json: true,
