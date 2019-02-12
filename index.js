@@ -44,6 +44,7 @@ async function provisionDir(path) {
 
 async function provisionFile(path) {
     let data;
+    let method = 'POST';
     if (Path.extname(path) != '.json') {
         debug(`Skipping unknown extension for ${path}`);
         return;
@@ -61,6 +62,11 @@ async function provisionFile(path) {
     // JSONify policy subsection
     if (Path.dirname(path).match(/^\/sys\/policy/) && data.hasOwnProperty('policy'))
         data.policy = JSON.stringify(data.policy);
+    // Change method test
+    if (data.hasOwnProperty('_method')) {
+        method = data._method;
+        delete data._method;
+    }
     // Pre-commit test
     if (data.hasOwnProperty('_unless_get')) {
         let skip = true;
@@ -88,7 +94,7 @@ async function provisionFile(path) {
         let rv = await request(`${vaultroot}/v1${uri}`, {
             body: data,
             json: true,
-            method: 'POST',
+            method: method,
             headers: {'X-Vault-Token': vaulttoken}
         });
         ndebug(rv);
