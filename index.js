@@ -76,9 +76,10 @@ async function provisionFile(path) {
             return;
         }
     }
+    // Provision
     try {
         path = Mustache.render(path, config.template);
-        let uri = Path.posix.join(Path.dirname(path), Path.basename(path,'.json'));
+        let uri = Path.join(Path.dirname(path), Path.basename(path,'.json')).replace(/\\/g,'/');
         let rv = await request(`${vaultroot}/v1${uri}`, {
             body: data,
             json: true,
@@ -90,7 +91,5 @@ async function provisionFile(path) {
         console.log(e.message);
     }
 }
-
-
 
 main();
