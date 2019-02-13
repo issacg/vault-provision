@@ -1,5 +1,5 @@
 {
-  "name": "vault-provision",
+  "name": "vault-provision",  
   "version": "1.0.0",
   "main": "index.js",
   "dependencies": {
@@ -13,7 +13,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Issac Goldstand",
+  "author": "Issac Goldstand <margol@beamartyr.net>",
   "repository": {
     "type": "git",
     "url": "git+ssh://git@github.com/issacg/vault-provision.git"
@@ -22,5 +22,5 @@
     "url": "https://github.com/issacg/vault-provision/issues"
   },
   "homepage": "https://github.com/issacg/vault-provision#readme",
-  "description": ""
+  "description": "A tool to assist provision the Vault tool by HashiCorp"
 }
